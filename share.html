@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>车社区-海圳慧眼</title>
+    <link rel="stylesheet" href="css/frozen.css">
+    <style>
+      body {
+        font-family: "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+      }
+
+      @media screen and (min-width: 768px) {
+        .ui-container {
+          max-width: 730px;
+          padding-right: 15px;
+          padding-left: 15px;
+          margin-right: auto;
+          margin-left: auto;
+        }
+      }
+    </style>
+  </head>
+
+  <body ontouchstart>
+    <section class="ui-container">
+      <!--分享不存在-->
+      <section id="post_not_exist_section" style="display: none;">
+        <div class="demo-item">
+          <div class="demo-block">
+            <section class="ui-container ui-center">
+              <div class="ui-tips ui-tips-warn">
+                <i></i><span>分享不存在或已经过期</span>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+      <!--分享不存在 结束-->
+
+      <section id="main_content_section" style="display: none;">
+        <!-- 发布者信息 -->
+        <div class="demo-item">
+          <div class="demo-block">
+            <ul class="ui-list ui-list-function ui-border-tb">
+              <li class="ui-border-t">
+                <div class="ui-avatar-s" id="author_img">
+                  <span style="background-image:url(img/header_default.png)"></span>
+                </div>
+                <div class="ui-list-info" style="padding-right:5px !important;">
+                  <h4 id="author_name">‘车社区’用户</h4>
+                  <p id="post_time_location">&nbsp;</p>
+                </div>
+              </li>
+              <li>
+                <h4 id="post_subject">&nbsp;</h4>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- 发布者信息结束 -->
+
+        <!-- 分享内容 -->
+        <div class="demo-item">
+          <div class="demo-block">
+            <!--加载提示-->
+            <section class="ui-container ui-center" id="loading_post_content">
+              <div class="ui-loading-wrap">
+                <p>加载中</p>
+                <i class="ui-loading"></i>
+              </div>
+            </section>
+            <!--加载提示结束-->
+            <!--图片列表-->
+            <ul class="ui-grid-halve" style="display: none;" id="imagelist">
+            </ul>
+            <!--图片列表结束-->
+
+            <!--视频列表-->
+            <div class="ui-container ui-border-tb" id="videolist" style="display: none;">
+              <video webkit-playsinline="" preload="none" controls="" x-webkit-airplay="allow" poster="img/thumbnail_default.png" width="100%" height="100%" src="" style="display:-webkit-box;" id="video_view"></video>
+            </div>
+            <!--视频列表 结束-->
+          </div>
+        </div>
+        <!-- 分享内容结束 -->
+
+        <!-- 评论内容 -->
+        <div class="demo-item">
+          <div class="demo-block">
+            <!--评论头部-->
+            <section class="ui-panel ui-panel-simple ui-border-tb ui-arrowlink">
+              <h2><span>评论</span><span class="ui-panel-subtitle" id="comments_size">总共0条</span><a href="download.html"><span class="ui-panel-title-tips">下载APP可查看更多功能</span></a></h2>
+            </section>
+            <!--评论头部 结束-->
+            <!--加载提示-->
+            <section class="ui-container ui-center" id="loading_comment_content">
+              <div class="ui-loading-wrap">
+                <p>加载中</p>
+                <i class="ui-loading"></i>
+              </div>
+            </section>
+            <!--加载提示结束-->
+            <!--评论数据-->
+            <ul class="ui-list ui-border-tb" id="commentlist" style="display: none;">
+            </ul>
+            <!--评论数据 结束-->
+          </div>
+        </div>
+        <!-- 评论内容结束 -->
+      </section>
+    </section>
+    <!-- /.ui-container-->
+    <script src="lib/zepto.min.js"></script>
+    <script src="js/frozen.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/share.js?r=201607080933"></script>
+  </body>
+
+</html>

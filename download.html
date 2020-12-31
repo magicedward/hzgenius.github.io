@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+
+    <title>海圳精灵</title>
+    <script type="text/javascript">
+      // 平台判断
+      var mobilePlatform = {
+        android: /android/i.test(navigator.userAgent),
+        ipad: /ipad/i.test(navigator.userAgent),
+        iphone: /iphone/i.test(navigator.userAgent),
+        wphone: /Windows Phone/i.test(navigator.userAgent)
+      };
+      // 是否为微信浏览器
+      function isWeiXin() {
+        var ua = window.navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      // 判断是否为移动端
+      function isMobile() {
+        var plat = false;
+        plat = mobilePlatform.android || mobilePlatform.ipad || mobilePlatform.iphone || mobilePlatform.wphone;
+        return plat;
+      }
+
+      function isAndroid() {
+        return mobilePlatform.android;
+      }
+
+      function isIOS() {
+        return (mobilePlatform.ipad || mobilePlatform.iphone);
+      }
+
+      function getPlatform() {
+        var plat = "";
+        plat = mobilePlatform.android && "android";
+        if (plat === false) {
+          plat = mobilePlatform.ipad && "ipad";
+        }
+        if (plat === false) {
+          plat = mobilePlatform.iphone && "iphone";
+        }
+        if (plat === false) {
+          plat = mobilePlatform.wphone && "Windows Phone";
+        }
+        return plat;
+      };
+      // 打印平台信息
+      function printPlatformInfo() {
+        var msg = [];
+        msg.push('getPlatform=' + getPlatform());
+        msg.push('isMobile=' + isMobile());
+        msg.push('isWeiXin=' + isWeiXin());
+      }
+      // 判断浏览器类型，跳转到不同的下载链接
+      // android设备的微信浏览器不支持下载功能，要跳转到指定页面并提示用户使用第三方浏览器
+      // ios设备的微信浏览器使用appstore的地址
+      printPlatformInfo();
+      if (isMobile()) {
+        // 移动端
+        if (isAndroid()) {
+          if (!isWeiXin()) {
+            location.replace('http://smart-eye.szhaizhen.com/upgrade/HizenSmartEye.apk');
+          }
+        } else if (isIOS()) {
+          if (!isWeiXin()) {
+            location.replace('https://itunes.apple.com/cn/app/id1362543466');
+          }
+        }
+      }
+    </script>
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        /*background-color: #888786;*/
+      }
+
+      #weixin_download_tip,
+      img {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      #weixin_download_tip {
+        display: none;
+      }
+
+      #pc_download {
+        /*text-align: center;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        vertical-align: middle;*/
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .btnn {
+        margin-top: 5px !important;
+        color: #FFFFFF !important;
+        padding: 20px !important;
+        font-size: 20px !important;
+        border-radius: 60px;
+        overflow: hidden;
+        display: inline-block !important;
+        position: relative;
+        z-index: 1;
+        background-color: #12BEF8;
+        width: 200px !important;
+        text-decoration:none;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div id="weixin_download_tip" style="display: none;">
+      <img src="img/weixin_download.png" />
+    </div>
+    <div class="center" id="pc_download" style="display: none;">
+      <h2>海圳精灵</h2>
+      <h2 style="font-size: 15px !important;">智慧记录仪 让爱•安全回家</h2>
+      <div class="download_qrcode center">
+        <div style="display: inline-block !important;margin: 20px;">
+          <div><img src="img/adnroid_app_qrcode.png" style="width: 300px;height: 300px;" /></div>
+          <a class="btnn" href="http://smart-eye.szhaizhen.com/upgrade/HizenSmartEye.apk">
+            <span>Android下载</span>
+          </a>
+          <p>支持安卓4.4及以上系统</p>
+        </div>
+        <div style="display: inline-block !important;margin: 20px;">
+          <div><img src="img/ios_app_qrcode.png" style="width: 300px;height: 300px;" /></div>
+          <a class="btnn" href="https://itunes.apple.com/cn/app/id1362543466">
+            <span>iOS下载</span>
+          </a>
+          <p>支持iOS8.0及以上系统</p>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    // 如果在微信浏览器中则提示在浏览器中打开，否则统一显示下载页面
+    if (isMobile() && isWeiXin()) {
+      document.getElementById('weixin_download_tip').style.display = "block";
+    } else {
+      document.getElementById('pc_download').style.display = "block";
+    }
+  </script>
+
+</html>

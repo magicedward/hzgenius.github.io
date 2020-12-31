@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <!--控制缓存-开始-->
+    <!--正式版本不需要禁用缓存-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!--控制缓存-结束-->
+    <link rel="stylesheet" href="css/frozen.css">
+    <title>智能接人-海圳慧眼</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #FFF;
+      }
+
+      #main_section,
+      #baidumap_div {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      /*#baidumap_controller_div{
+        position: absolute;
+        bottom: 100px;
+        left: 0;
+      }*/
+
+      #loc_car {
+        z-index: 999;
+        height: 32px;
+        line-height: 32px;
+        position: fixed;
+        bottom: 150px;
+        left: 20px;
+      }
+
+      #loc_my {
+        z-index: 999;
+        height: 32px;
+        line-height: 32px;
+        position: fixed;
+        bottom: 100px;
+        left: 20px;
+      }
+
+      #zoom_in {
+        z-index: 999;
+        height: 32px;
+        line-height: 32px;
+        position: fixed;
+        bottom: 150px;
+        right: 20px;
+      }
+
+      #zoom_out {
+        z-index: 999;
+        height: 32px;
+        line-height: 32px;
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+      }
+
+      #loc_car img,
+      #loc_my img,
+      #zoom_in img,
+      #zoom_out img {
+        width: 32px;
+      }
+
+      #loc_car:active,
+      #loc_my:active,
+      #zoom_in:active,
+      #zoom_out:active {
+        background-color: #a9a9a9;
+      }
+
+      #baidumap_location_pin {
+        display: none;
+        z-index: 999;
+        position: fixed;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 80px;
+        height: 44px;
+        text-align: center;
+      }
+
+      #baidumap_location_pin i {
+        color: red;
+        font-size: 80px;
+        margin-top: -22px;
+      }
+    </style>
+  </head>
+
+  <body ontouchstart>
+    <!-- 头部信息栏 -->
+    <section id="header_section" style="display: none;">
+      <ul class="ui-list ui-border-tb" style="position: fixed; top: 0;left: 0;z-index: 999;">
+        <li>
+          <div class="ui-avatar-s">
+            <span style="background-image:url(img/header_default.png)" id="picker_headerimg"></span>
+          </div>
+          <div class="ui-list-info ui-border-t">
+            <h4 class="ui-nowrap" id="picker_name"><!--ERIC--></h4>
+            <p class="ui-nowrap" id="picker_status">正准备来接您</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!--发送新位置-->
+    <section id="modify_location_section" style="display: none;">
+      <div class="ui-btn-wrap" style="position: fixed; bottom: 0;left: 0; right:0; z-index: 999; padding-bottom: 0px !important; padding-left: 0px !important; padding-right: 0px !important; ">
+        <button class="ui-btn-lg ui-btn-primary" style="border-radius: 0px !important;">更改我的位置</button>
+      </div>
+    </section>
+
+    <!-- 低部状态栏 -->
+    <section id="footer_section" style="display: none;">
+      <ul class="ui-list ui-list-text ui-border-tb" style="position: fixed; bottom: 0;left: 0;z-index: 999;">
+        <li class="ui-border-t" style="padding: 0 !important;">
+          <h4 id="location_address">请稍候...</h4>
+          <div class="ui-btn ui-border-l" id="btn_send_location" style="min-height: 50px !important; line-height: 50px !important;">发送位置</div>
+        </li>
+      </ul>
+    </section>
+
+    <!--主体内容-->
+    <section id="main_section" style="display: none;">
+      <div id="baidumap_div"></div>
+      <div id="baidumap_controller_div">
+        <div id="loc_car">
+          <img src="img/my_car.png" />
+        </div>
+        <div id="loc_my">
+          <img src="img/my_location.png" />
+        </div>
+        <div id="zoom_in">
+          <img src="img/zoom_in.png" />
+        </div>
+        <div id="zoom_out">
+          <img src="img/zoom_out.png" />
+        </div>
+      </div>
+      <div id="baidumap_location_pin">
+        <i class="ui-icon-pin"></i>
+      </div>
+    </section>
+
+    <!--分享过期-->
+    <section id="expired_section" class="ui-notice" style="display: none;">
+      <i></i>
+      <p>分享已失效，或您的好友关闭了该分享</p>
+      <div class="ui-notice-btn" style="visibility: hidden;">
+        <button class="ui-btn-primary ui-btn-lg" id="close_window">关闭窗口</button>
+      </div>
+    </section>
+  </body>
+  <!--加载js-->
+  <script src="lib/zepto.min.js"></script>
+  <script src="js/frozen.js"></script>
+  <script src="js/utils.js"></script>
+  <script type="text/javascript" charset="utf-8" src="http://api.map.baidu.com/api?v=2.0&ak=15BESRtLNoXEUD3FQwHRzkeg"></script>
+  <script src="js/pickup.js?r=201607081115"></script>
+
+</html>

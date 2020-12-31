@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>设备位置</title>
+    <style type="text/css">
+      body,
+      html,
+      #mapdiv {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        margin: 0;
+        font-family: "微软雅黑";
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="mapdiv"></div>
+  </body>
+
+  <script type="text/javascript" charset="utf-8" src="js/utils.js?v=201606151211"></script>
+  <script type="text/javascript" charset="utf-8" src="http://api.map.baidu.com/api?v=2.0&ak=15BESRtLNoXEUD3FQwHRzkeg"></script>
+  <script type="text/javascript" charset="utf-8">
+    var COORD_TYPE_GPS = 0;
+    var COORD_TYPE_BD0911 = 0X01;
+
+    init();
+
+    function updateDevLocation(tm, point) {
+      var map = new BMap.Map("mapdiv");
+      map.centerAndZoom(point, 10);
+      map.enableScrollWheelZoom(true);
+      map.addControl(new BMap.NavigationControl());
+      map.addControl(new BMap.ScaleControl());
+      map.addControl(new BMap.OverviewMapControl());
+      map.addControl(new BMap.MapTypeControl());
+      // 添加缩略图
+      map.addControl(new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT}));
+
+      var marker = new BMap.Marker(point);
+      var title = "设备于" + Utils.unix2date(tm) + "所在的最后位置";
+      var label = new BMap.Label(title, {
+        offset: new BMap.Size(20, -10)
+      });
+      marker.setLabel(label);
+      map.addOverlay(marker);
+    }
+
+    function init() {
+      var tm = parseInt(Utils.getQueryString("tm") || 0);
+      var ex = parseInt(Utils.getQueryString("ex") || 0);
+      var lon = parseInt(Utils.getQueryString("lon") || 0);
+      var lat = parseInt(Utils.getQueryString("lat") || 0);
+      if (tm === 0 && ex === 0 && (lon === 0 || lat === 0)) {
+        alert("无效的GPS数据");
+        return;
+      }
+
+      lon = lon / 1e6;
+      lat = lat / 1e6;
+
+      var coordType = ex >>> 30;
+      var devPoint = new BMap.Point(lon, lat);
+      var mBaiduMapConvertor;
+      if (coordType === COORD_TYPE_BD0911) {
+        updateDevLocation(tm, devPoint);
+      } else {
+        var gpsPoints = [];
+        gpsPoints.push(devPoint);
+        mBaiduMapConvertor = new BMap.Convertor();
+        mBaiduMapConvertor.translate(gpsPoints, 1, 5, function(result) {
+          if (result.status !== 0) {
+            alert("GPS坐标转换错误: " + result.status);
+            return;
+          }
+          updateDevLocation(tm, (result.points)[0]);
+        });
+
+      }
+
+      //
+      //    var icon = new BMap.Icon('http://developer.baidu.com/map/jsdemo/img/car.png', new BMap.Size(52, 26), {
+      //      anchor: new BMap.Size(27, 13)
+      //    });
+      //    var marker = new BMap.Marker(point,{icon:icon});
+      //    marker.setRotation(-90);
+
+    }
+  </script>
+
+</html>
